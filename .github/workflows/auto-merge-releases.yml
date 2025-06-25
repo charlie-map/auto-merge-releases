@@ -48,8 +48,10 @@ jobs:
               line="${line:2}"
               echo "Processing line: $line"
 
-              if [ "$line" <= "${{ steps.branch_name.outputs.branch }}" ]; then
-                  continue
+              if [ "$line" == "${{ steps.branch_name.outputs.branch }}" ]; then
+                continue
+              elif [[ "$line" < "${{ steps.branch_name.outputs.branch }}" ]]; then
+                continue
               fi
 
               git checkout $line
