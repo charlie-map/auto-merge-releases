@@ -1,0 +1,40 @@
+name: Auto-Merge Releases
+
+on:
+  push:
+    branches:
+      - release**
+
+jobs:
+  auto-merge:
+    name: Auto-merge
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Extract branch name
+        id: branch_name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "charlie-map"
+          git config --global user.email "charjhall777@gmail.com"
+
+      - name: Merge branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Use the default GitHub token
+        run: |
+          git branch --list "release*"
+
+          git checkout target
+          git pull origin ${{ steps.branch_name.outputs.branch }}
+          git merge --no-ff origin/${{ steps.branch_name.outputs.branch }} -m "Automated merge from ${{ steps.branch_name.outputs.branch }}"
+          git push origin target
