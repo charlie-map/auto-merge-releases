@@ -55,7 +55,8 @@ jobs:
               fi
 
               git checkout $line
-              git pull origin "$prev_branch"
+              echo "Pulling change from $prev_branch into $line"
+              git pull origin "$prev_branch" --allow-unrelated-histories
               git merge --no-ff origin/"$prev_branch" -m "Automated merge from $prev_branch"
               git push origin $line
 
