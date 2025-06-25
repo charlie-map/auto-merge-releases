@@ -32,9 +32,24 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Use the default GitHub token
         run: |
-          git branch --list "release*"
+          filename="releases.txt"
 
-          git checkout target
-          git pull origin ${{ steps.branch_name.outputs.branch }}
-          git merge --no-ff origin/${{ steps.branch_name.outputs.branch }} -m "Automated merge from ${{ steps.branch_name.outputs.branch }}"
-          git push origin target
+          if [ -e "$filename" ]; then
+            rm "$filename"
+          fi
+
+          git branch --list "release*" >> "$filename"
+
+          # Loop through each line of the file
+          while IFS= read -r line || [[ -n "$line" ]]; do
+              # Process each line here
+              line="${line:2}"
+              echo "Processing line: $line"
+
+              git checkout $line
+              git pull origin ${{ steps.branch_name.outputs.branch }}
+              git merge --no-ff origin/${{ steps.branch_name.outputs.branch }} -m "Automated merge from ${{ steps.branch_name.outputs.branch }}"
+              git push origin $line
+          done < "$filename"
+
+          rm "$filename"
