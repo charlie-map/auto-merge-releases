@@ -15,6 +15,9 @@ jobs:
       pull-requests: write
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Extract branch name
         id: branch_name
         shell: bash
@@ -35,6 +38,8 @@ jobs:
             rm "$filename"
           fi
 
+          git checkout ${{ github.event.repository.default_branch }}
+          git pull
           git branch --list "release*" >> "$filename"
 
           # Loop through each line of the file
