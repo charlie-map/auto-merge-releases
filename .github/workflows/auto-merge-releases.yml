@@ -33,6 +33,7 @@ jobs:
               rm "$filename"
           fi
 
+          git pull
           for remotebranch in `git branch -r | grep release | grep -v ${{ steps.branch_name.outputs.branch }}`; do git branch --track ${remotebranch#origin/} $remotebranch; done
           git branch --list "release*"
           git branch --list "release*" >> "$filename"
