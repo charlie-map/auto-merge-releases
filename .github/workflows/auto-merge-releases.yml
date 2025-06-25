@@ -39,6 +39,8 @@ jobs:
           git branch --list "release*"
           git branch --list "release*" >> "$filename"
 
+          git config pull.rebase false
+
           # Loop through each line of the file
           prev_branch=${{ steps.branch_name.outputs.branch }}
           while IFS= read -r line || [[ -n "$line" ]]; do
