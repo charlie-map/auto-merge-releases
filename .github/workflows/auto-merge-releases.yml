@@ -64,7 +64,7 @@ jobs:
               if git merge --no-ff --allow-unrelated-histories origin/"$prev_branch" -m "Automated merge from $prev_branch"; then
                 echo "Merge successful"
                 git push origin $line
-              elif
+              else
                 echo "Create PR"
               fi
 
