@@ -35,7 +35,7 @@ jobs:
           filename="releases.txt"
 
           if [ -e "$filename" ]; then
-            rm "$filename"
+              rm "$filename"
           fi
 
           # git checkout ${{ github.event.repository.default_branch }}
@@ -47,6 +47,10 @@ jobs:
               # Process each line here
               line="${line:2}"
               echo "Processing line: $line"
+
+              if [ "$line" <= "${{ steps.branch_name.outputs.branch }}" ]; then
+                  continue
+              fi
 
               git checkout $line
               git pull origin ${{ steps.branch_name.outputs.branch }}
