@@ -25,11 +25,6 @@ jobs:
         shell: bash
         run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
 
-      - name: Set up Git
-        run: |
-          git config --global user.name "charlie-map"
-          git config --global user.email "charjhall777@gmail.com"
-
       - name: Merge branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Use the default GitHub token
@@ -40,12 +35,12 @@ jobs:
               rm "$filename"
           fi
 
-          git pull
           git checkout ${{ github.event.repository.default_branch }}
           git branch --list "release*"
           git branch --list "release*" >> "$filename"
 
           # Loop through each line of the file
+          prev_branch = ${{ steps.branch_name.outputs.branch }}
           while IFS= read -r line || [[ -n "$line" ]]; do
               # Process each line here
               line="${line:2}"
@@ -56,9 +51,11 @@ jobs:
               fi
 
               git checkout $line
-              git pull origin ${{ steps.branch_name.outputs.branch }}
-              git merge --no-ff origin/${{ steps.branch_name.outputs.branch }} -m "Automated merge from ${{ steps.branch_name.outputs.branch }}"
+              git pull origin $prev_branch
+              git merge --no-ff origin/$prev_branch -m "Automated merge from $prev_branch"
               git push origin $line
+
+              prev_branch=$line
           done < "$filename"
 
           rm "$filename"
