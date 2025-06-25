@@ -17,8 +17,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
 
       - name: Extract branch name
         id: branch_name
@@ -35,6 +33,7 @@ jobs:
               rm "$filename"
           fi
 
+          git pull
           git checkout ${{ github.event.repository.default_branch }}
           git branch --list "release*"
           git branch --list "release*" >> "$filename"
@@ -51,8 +50,8 @@ jobs:
               fi
 
               git checkout $line
-              git pull origin $prev_branch
-              git merge --no-ff origin/$prev_branch -m "Automated merge from $prev_branch"
+              git pull origin "$prev_branch"
+              git merge --no-ff origin/"$prev_branch" -m "Automated merge from $prev_branch"
               git push origin $line
 
               prev_branch=$line
