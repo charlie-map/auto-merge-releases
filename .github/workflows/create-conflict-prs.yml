@@ -1,0 +1,17 @@
+name: Create Conflict PRs
+
+on:
+  workflow-dispatch:
+
+jobs:
+  auto-merge:
+    name: Auto-merge
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      checks: write
+      pull-requests: write
+
+    steps:
+      - name: Create PRs
+        uses: peter-evans/create-pull-request@v7
