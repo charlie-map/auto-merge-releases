@@ -61,6 +61,8 @@ jobs:
 
               git checkout $line
               echo "Pulling change from $prev_branch into $line"
+              git pull
+
               if git merge --no-ff --allow-unrelated-histories origin/"$prev_branch" -m "Automated merge from $prev_branch"; then
                 echo "Merge successful"
                 git push origin $line
