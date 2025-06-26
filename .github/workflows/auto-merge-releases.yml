@@ -82,4 +82,6 @@ jobs:
 
       - name: Trigger Conflict PR
         if: ${{ steps.merge_branch.outputs.origin }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Use the default GitHub token
         run: gh workflow run create-conflict-prs.yml -f head=${{ steps.merge_branch.outputs.head }} -f origin=${{ steps.merge_branch.outputs.origin }}
