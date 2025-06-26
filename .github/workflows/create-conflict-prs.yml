@@ -18,7 +18,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Print workflow run
+        run: |
+          echo "${{ github.event.workflow_run }}"
+
       - name: Create Pull Request
+        if: github.event.workflow_run.origin
         uses: peter-evans/create-pull-request@v7
         with:
           title: "Automated merge from ${{ github.event.workflow_run.origin }} conflict"
