@@ -25,7 +25,7 @@ jobs:
           echo "${{ inputs.origin }} ${{ inputs.base }}"
 
       - name: Create Pull Request
-        if: inputs.origin && inputs.base
+        if: ${{ inputs.origin && inputs.base }}
         uses: peter-evans/create-pull-request@v7
         with:
           title: "Automated merge from ${{ inputs.origin }} conflict"
