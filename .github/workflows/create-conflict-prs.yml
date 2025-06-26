@@ -1,17 +1,30 @@
-name: Create Conflict PRs
+name: Create Conflict PR
 
 on:
-  workflow_dispatch:
+  workflow_run:
+    workflows: [Auto-Merge Releases]
+    types:
+      - completed
 
 jobs:
-  auto-merge:
-    name: Auto-merge
+  pr_create:
+    name: Create PR
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      checks: write
       pull-requests: write
 
     steps:
-      - name: Create PRs
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
+        with:
+          title: "Automated merge from ${{ github.event.workflow_run.origin }} conflict"
+          base: ${{ github.event.workflow_run.head }}
+          branch: ${{ github.event.workflow_run.origin }}
+          labels: |
+            conflict
+            automated pr
+          draft: false

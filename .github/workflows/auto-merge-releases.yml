@@ -67,8 +67,11 @@ jobs:
                 echo "Merge successful"
                 git push origin $line
               else
-                echo "Create PR"
-                cat .github/workflows/auto-merge-releases.yml
+                echo "Failed to merge. Creating PR and stopping run"
+                echo "head=$line" >> $GITHUB_OUTPUT
+                echo "origin=$prev_branch" >> $GITHUB_OUTPUT
+
+                break
               fi
 
               prev_branch=$line
