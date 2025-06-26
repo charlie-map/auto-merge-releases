@@ -66,6 +66,9 @@ jobs:
               if git merge --no-ff --allow-unrelated-histories origin/"$prev_branch" -m "Automated merge from $prev_branch"; then
                 echo "Merge successful"
                 git push origin $line
+
+                # We only do one after the release because this will be run again on the branch we push to.
+                break
               else
                 echo "Create PR"
                 cat .github/workflows/auto-merge-releases.yml

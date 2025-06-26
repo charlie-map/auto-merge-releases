@@ -1,7 +1,7 @@
 name: Create Conflict PRs
 
 on:
-  workflow-dispatch:
+  workflow_dispatch:
 
 jobs:
   auto-merge:
