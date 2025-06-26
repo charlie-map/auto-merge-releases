@@ -1,10 +1,12 @@
 name: Create Conflict PR
 
 on:
-  workflow_run:
-    workflows: [Auto-Merge Releases]
-    types:
-      - completed
+  workflow_dispatch:
+    inputs:
+      head:
+        type: string
+      origin:
+        type: string
 
 jobs:
   pr_create:
@@ -20,15 +22,15 @@ jobs:
 
       - name: Print workflow run
         run: |
-          echo "${{ github.event.workflow_run }}"
+          echo "${{ inputs.origin }}"
 
       - name: Create Pull Request
-        if: github.event.workflow_run.origin
+        if: inputs.origin
         uses: peter-evans/create-pull-request@v7
         with:
-          title: "Automated merge from ${{ github.event.workflow_run.origin }} conflict"
-          base: ${{ github.event.workflow_run.head }}
-          branch: ${{ github.event.workflow_run.origin }}
+          title: "Automated merge from ${{ inputs.origin }} conflict"
+          base: ${{ inputs.head }}
+          branch: ${{ inputs.origin }}
           labels: |
             conflict
             automated pr

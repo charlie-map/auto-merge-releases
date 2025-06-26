@@ -31,6 +31,7 @@ jobs:
         run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
 
       - name: Merge branch
+        id: merge_branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Use the default GitHub token
         run: |
@@ -78,3 +79,7 @@ jobs:
           done < "$filename"
 
           rm "$filename"
+
+      - name: Trigger Conflict PR
+        if: ${{ steps.merge_branch.outputs.origin }}
+        run: gh workflow run create-conflict-prs.yml -f head=${{ steps.merge_branch.outputs.head }} -f origin=${{ steps.merge_branch.outputs.origin }}
