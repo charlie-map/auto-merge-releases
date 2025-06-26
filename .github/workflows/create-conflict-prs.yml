@@ -27,6 +27,6 @@ jobs:
       - name: Create Pull Request
         if: ${{ inputs.origin && inputs.base }}
         continue-on-error: true
-        run: gh pr create -B ${{ inputs.base }} -H ${{ inputs.origin }} --title 'Automated merge from ${{ inputs.origin }} conflict' --body 'Created by Github action'
+        run: gh pr create -B ${{ inputs.base }} -H ${{ inputs.origin }} --title '[CONFLICT] Automated merge from ${{ inputs.origin }}' --body 'Created by Github action'
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
