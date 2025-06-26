@@ -70,7 +70,7 @@ jobs:
                 git push origin $line
               else
                 echo "Failed to merge. Creating PR and stopping run"
-                echo "head=$prev_branch" >> $GITHUB_OUTPUT
+                echo "base=$prev_branch" >> $GITHUB_OUTPUT
                 echo "origin=$line" >> $GITHUB_OUTPUT
 
                 break
