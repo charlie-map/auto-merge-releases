@@ -26,6 +26,6 @@ jobs:
 
       - name: Create Pull Request
         if: ${{ inputs.origin && inputs.base }}
-        run: gh pr create -B ${{ inputs.base }} -H ${{ inputs.origin }} --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
+        run: gh pr create -B ${{ inputs.base }} -H ${{ inputs.origin }} --title 'Automated merge from ${{ inputs.origin }} conflict' --body 'Created by Github action'
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
