@@ -3,9 +3,9 @@ name: Create Conflict PR
 on:
   workflow_dispatch:
     inputs:
-      head:
+      base:
         type: string
-      origin:
+      origin: # compare
         type: string
 
 jobs:
@@ -22,14 +22,14 @@ jobs:
 
       - name: Print workflow run
         run: |
-          echo "${{ inputs.origin }}"
+          echo "${{ inputs.origin }} ${{ inputs.base }}"
 
       - name: Create Pull Request
-        if: inputs.origin
+        if: inputs.origin && inputs.base
         uses: peter-evans/create-pull-request@v7
         with:
           title: "Automated merge from ${{ inputs.origin }} conflict"
-          base: ${{ inputs.head }}
+          base: ${{ inputs.base }}
           branch: ${{ inputs.origin }}
           labels: |
             conflict

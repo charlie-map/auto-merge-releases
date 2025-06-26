@@ -70,7 +70,7 @@ jobs:
                 git push origin $line
               else
                 echo "Failed to merge. Creating PR and stopping run"
-                echo "base=$prev_branch" >> $GITHUB_OUTPUT
+                echo "head=$prev_branch" >> $GITHUB_OUTPUT
                 echo "origin=$line" >> $GITHUB_OUTPUT
 
                 break
@@ -85,4 +85,4 @@ jobs:
         if: ${{ steps.merge_branch.outputs.origin }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Use the default GitHub token
-        run: gh workflow run create-conflict-prs.yml -f head=${{ steps.merge_branch.outputs.head }} -f origin=${{ steps.merge_branch.outputs.origin }}
+        run: gh workflow run create-conflict-prs.yml -f base=${{ steps.merge_branch.outputs.base }} -f origin=${{ steps.merge_branch.outputs.origin }}
