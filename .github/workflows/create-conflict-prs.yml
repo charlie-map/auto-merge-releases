@@ -18,20 +18,14 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Print workflow run
         run: |
-          echo "${{ inputs.origin }} ${{ inputs.base }}"
+          echo "${{ inputs.base }} <-- ${{ inputs.origin }}"
 
       - name: Create Pull Request
         if: ${{ inputs.origin && inputs.base }}
-        uses: peter-evans/create-pull-request@v7
-        with:
-          title: "Automated merge from ${{ inputs.origin }} conflict"
-          base: ${{ inputs.base }}
-          branch: ${{ inputs.origin }}
-          labels: |
-            conflict
-            automated pr
-          draft: false
+        run: gh pr create -B ${{ inputs.base }} -H ${{ inputs.origin }} --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
