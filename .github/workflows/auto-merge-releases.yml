@@ -66,16 +66,16 @@ jobs:
               git pull
 
               if git merge --no-ff --allow-unrelated-histories origin/"$prev_branch" -m "Automated merge from $prev_branch"; then
-                echo "Merge successful"
-                git push origin $line
-
-                if [ $? -ne 0 ]; then
+                echo "Merge successful. Pushing..."
+                {
+                  git push origin $line
+                } || {
                   echo "Merge cannot be pushed directly"
                   echo "base=$line" >> $GITHUB_OUTPUT
                   echo "origin=$prev_branch" >> $GITHUB_OUTPUT
 
                   break
-                fi
+                }
               else
                 echo "Failed to merge. Creating PR and stopping run"
                 echo "base=$line" >> $GITHUB_OUTPUT
