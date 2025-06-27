@@ -71,7 +71,7 @@ jobs:
                   git push origin $line
                 } || {
                   echo "Merge cannot be pushed directly"
-                  echo "type='NEEDS APPROVAL'" >> $GITHUB_OUTPUT
+                  echo "type=PROTECTED" >> $GITHUB_OUTPUT
                   echo "base=$line" >> $GITHUB_OUTPUT
                   echo "origin=$prev_branch" >> $GITHUB_OUTPUT
 
@@ -79,7 +79,7 @@ jobs:
                 }
               else
                 echo "Failed to merge. Creating PR and stopping run"
-                echo "type='CONFLICT'" >> $GITHUB_OUTPUT
+                echo "type=CONFLICT" >> $GITHUB_OUTPUT
                 echo "base=$line" >> $GITHUB_OUTPUT
                 echo "origin=$prev_branch" >> $GITHUB_OUTPUT
 
