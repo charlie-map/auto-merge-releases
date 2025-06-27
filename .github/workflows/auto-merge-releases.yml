@@ -67,7 +67,7 @@ jobs:
 
               if git merge --no-ff --allow-unrelated-histories origin/"$prev_branch" -m "Automated merge from $prev_branch"; then
                 echo "Merge successful"
-                if git push origin $line; then
+                git push origin $line
 
                 if [ $? -ne 0 ]; then
                   echo "Merge cannot be pushed directly"
