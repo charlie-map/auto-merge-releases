@@ -10,9 +10,7 @@ jobs:
     name: Auto-merge
     runs-on: ubuntu-latest
     permissions:
-      actions: write
       contents: write
-      checks: write
       pull-requests: write
 
     steps:
@@ -78,9 +76,12 @@ jobs:
                   break
                 }
               else
-                echo "Failed to merge. Creating PR and stopping run"
+                echo "Failed to merge due to conflicts. Generating PR from conflict branch"
+
+                git checkout -b conflict-$line
+
                 echo "type=CONFLICT" >> $GITHUB_OUTPUT
-                echo "base=$line" >> $GITHUB_OUTPUT
+                echo "base=conflict-$line" >> $GITHUB_OUTPUT
                 echo "origin=$prev_branch" >> $GITHUB_OUTPUT
 
                 break
