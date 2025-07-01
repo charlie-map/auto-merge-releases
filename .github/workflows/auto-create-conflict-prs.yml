@@ -1,0 +1,48 @@
+name: Auto-Create Conflict PRs
+
+on:
+  push:
+    branches:
+      - conflict-release**
+
+jobs:
+  auto-pr:
+    name: Auto-create PRs
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Git account
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Extract branch name
+        id: branch_name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+
+      - name: Create pull request
+        id: branch_info
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Use the default GitHub token
+        run: |
+          origin=${{ steps.branch_name.outputs.branch }}
+          base="${origin:9}"
+
+          echo "type=CONFLICT" >> $GITHUB_OUTPUT
+          echo "base=$base" >> $GITHUB_OUTPUT
+          echo "origin=$origin" >> $GITHUB_OUTPUT
+
+      - name: Trigger Conflict PR
+        if: ${{ steps.branch_info.outputs.base && steps.branch_info.outputs.origin }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Use the default GitHub token
+        run: gh pr create -B ${{ steps.branch_info.outputs.base }} -H ${{ steps.branch_info.outputs.origin }} --title '[${{ steps.branch_info.outputs.type }}] Automated merge from ${{ steps.branch_info.outputs.origin }}' --body 'Created by Github action'
