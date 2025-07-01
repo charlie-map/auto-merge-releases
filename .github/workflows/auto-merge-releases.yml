@@ -81,11 +81,11 @@ jobs:
                 {
                   git checkout -b conflict-$line
                   git push --set-upstream origin conflict-$line
+                } && {
+                  echo "type=CONFLICT" >> $GITHUB_OUTPUT
+                  echo "base=$prev_branch" >> $GITHUB_OUTPUT
+                  echo "origin=conflict-$line" >> $GITHUB_OUTPUT
                 }
-
-                echo "type=CONFLICT" >> $GITHUB_OUTPUT
-                echo "base=$prev_branch" >> $GITHUB_OUTPUT
-                echo "origin=conflict-$line" >> $GITHUB_OUTPUT
 
                 break
               fi
