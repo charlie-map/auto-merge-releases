@@ -84,7 +84,7 @@ jobs:
                 } && {
                   echo "type=CONFLICT" >> $GITHUB_OUTPUT
                   echo "base=conflict-$line" >> $GITHUB_OUTPUT
-                  echo "origin=$line" >> $GITHUB_OUTPUT
+                  echo "origin=$prev_branch" >> $GITHUB_OUTPUT
                 }
 
                 break
