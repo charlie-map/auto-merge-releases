@@ -79,6 +79,7 @@ jobs:
                 echo "Failed to merge due to conflicts. Generating PR from conflict branch"
 
                 git checkout -b conflict-$line
+                git push --set-upstream origin conflict-$line
 
                 echo "type=CONFLICT" >> $GITHUB_OUTPUT
                 echo "base=conflict-$line" >> $GITHUB_OUTPUT
