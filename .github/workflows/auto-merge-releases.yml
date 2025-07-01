@@ -83,7 +83,7 @@ jobs:
                   git push --set-upstream origin conflict-$line
                 } && {
                   echo "type=CONFLICT" >> $GITHUB_OUTPUT
-                  echo "base=$prev_branch" >> $GITHUB_OUTPUT
+                  echo "base=$line" >> $GITHUB_OUTPUT
                   echo "origin=conflict-$line" >> $GITHUB_OUTPUT
                 }
 
